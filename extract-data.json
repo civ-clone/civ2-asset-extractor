@@ -1,0 +1,568 @@
+{
+  "files": {
+    "TERRAIN1.GIF": {
+      "grids": [
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 1,
+          "width": 64,
+          "height": 32,
+          "columns": 4,
+          "names": [
+            "desert/base-0",
+            "desert/base-1",
+            "desert/oasis",
+            "desert/desert-oil",
+            "plains/base-0",
+            null,
+            "plains/buffalo",
+            "plains/wheat",
+            "grassland/base-0",
+            "grassland/base-1",
+            null,
+            null,
+            "forest/base-0",
+            "forest/base-1",
+            "forest/pheasant",
+            "forest/silk",
+            "hills/base-0",
+            "hills/base-1",
+            "hills/coal",
+            "hills/wine",
+            "mountains/base-0",
+            "mountains/base-1",
+            "mountains/gold",
+            "mountains/iron",
+            "tundra/base-0",
+            null,
+            "tundra/game",
+            "tundra/furs",
+            "glacier/base-0",
+            null,
+            "glacier/ivory",
+            "glacier/glacier-oil",
+            "swamp/base-0",
+            null,
+            "swamp/peat",
+            "swamp/spice",
+            "jungle/base-0",
+            "jungle/base-1",
+            "jungle/gems",
+            "jungle/fruit",
+            "ocean/base-0",
+            null,
+            "ocean/fish",
+            "ocean/whales"
+          ]
+        },
+        {
+          "path": "",
+          "x": 456,
+          "y": 100,
+          "width": 64,
+          "height": 32,
+          "columns": 1,
+          "names": [
+            "improvements/irrigation",
+            "improvements/farmland",
+            "improvements/mine",
+            "improvements/pollution",
+            "terrain/grassland/resources",
+            "map/hut"
+          ]
+        },
+        {
+          "path": "improvements/road/",
+          "x": 1,
+          "y": 364,
+          "width": 64,
+          "height": 32,
+          "columns": 9,
+          "names": [
+            "isolated",
+            "ne",
+            "e",
+            "se",
+            "s",
+            "sw",
+            "w",
+            "nw",
+            "n"
+          ]
+        },
+        {
+          "path": "improvements/railroad/",
+          "x": 1,
+          "y": 397,
+          "width": 64,
+          "height": 32,
+          "columns": 9,
+          "names": [
+            "isolated",
+            "ne",
+            "e",
+            "se",
+            "s",
+            "sw",
+            "w",
+            "nw",
+            "n"
+          ]
+        },
+        {
+          "path": "",
+          "x": 1,
+          "y": 447,
+          "width": 64,
+          "height": 32,
+          "columns": 5,
+          "names": [
+            "terrain/dither",
+            null,
+            "map/blank"
+          ]
+        }
+      ]
+    },
+    "TERRAIN2.GIF": {
+      "grids": [
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 67,
+          "width": 64,
+          "height": 32,
+          "columns": 8,
+          "names": [
+            "river/isolated",
+            "river/ne",
+            "river/se",
+            "river/ne-se",
+            "river/sw",
+            "river/ne-sw",
+            "river/se-sw",
+            "river/ne-se-sw",
+            "river/nw",
+            "river/ne-nw",
+            "river/se-nw",
+            "river/ne-se-nw",
+            "river/sw-nw",
+            "river/ne-sw-nw",
+            "river/se-sw-nw",
+            "river/ne-se-sw-nw"
+          ]
+        },
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 133,
+          "width": 64,
+          "height": 32,
+          "columns": 8,
+          "names": [
+            "forest/isolated",
+            "forest/ne",
+            "forest/se",
+            "forest/ne-se",
+            "forest/sw",
+            "forest/ne-sw",
+            "forest/se-sw",
+            "forest/ne-se-sw",
+            "forest/nw",
+            "forest/ne-nw",
+            "forest/se-nw",
+            "forest/ne-se-nw",
+            "forest/sw-nw",
+            "forest/ne-sw-nw",
+            "forest/se-sw-nw",
+            "forest/ne-se-sw-nw"
+          ]
+        },
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 199,
+          "width": 64,
+          "height": 32,
+          "columns": 8,
+          "names": [
+            "mountains/isolated",
+            "mountains/ne",
+            "mountains/se",
+            "mountains/ne-se",
+            "mountains/sw",
+            "mountains/ne-sw",
+            "mountains/se-sw",
+            "mountains/ne-se-sw",
+            "mountains/nw",
+            "mountains/ne-nw",
+            "mountains/se-nw",
+            "mountains/ne-se-nw",
+            "mountains/sw-nw",
+            "mountains/ne-sw-nw",
+            "mountains/se-sw-nw",
+            "mountains/ne-se-sw-nw"
+          ]
+        },
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 265,
+          "width": 64,
+          "height": 32,
+          "columns": 8,
+          "names": [
+            "hills/isolated",
+            "hills/ne",
+            "hills/se",
+            "hills/ne-se",
+            "hills/sw",
+            "hills/ne-sw",
+            "hills/se-sw",
+            "hills/ne-se-sw",
+            "hills/nw",
+            "hills/ne-nw",
+            "hills/se-nw",
+            "hills/ne-se-nw",
+            "hills/sw-nw",
+            "hills/ne-sw-nw",
+            "hills/se-sw-nw",
+            "hills/ne-se-sw-nw"
+          ]
+        },
+        {
+          "path": "terrain/",
+          "x": 1,
+          "y": 331,
+          "width": 64,
+          "height": 32,
+          "columns": 8,
+          "names": [
+            "river-mouth/0",
+            "river-mouth/1",
+            "river-mouth/2",
+            "river-mouth/3"
+          ],
+          "clear": [
+            "#00ffff"
+          ]
+        },
+        {
+          "path": "terrain/coast/",
+          "x": 1,
+          "y": 429,
+          "width": 32,
+          "height": 16,
+          "columns": 8,
+          "stepX": 66,
+          "names": [
+            "n-000",
+            "n-001",
+            "n-010",
+            "n-011",
+            "n-100",
+            "n-101",
+            "n-110",
+            "n-111"
+          ]
+        },
+        {
+          "path": "terrain/coast/",
+          "x": 1,
+          "y": 446,
+          "width": 32,
+          "height": 16,
+          "columns": 8,
+          "stepX": 66,
+          "names": [
+            "s-000",
+            "s-001",
+            "s-010",
+            "s-011",
+            "s-100",
+            "s-101",
+            "s-110",
+            "s-111"
+          ]
+        },
+        {
+          "path": "terrain/coast/",
+          "x": 1,
+          "y": 463,
+          "width": 32,
+          "height": 16,
+          "columns": 8,
+          "stepX": 66,
+          "names": [
+            "w-000",
+            "w-001",
+            "w-010",
+            "w-011",
+            "w-100",
+            "w-101",
+            "w-110",
+            "w-111"
+          ]
+        },
+        {
+          "path": "terrain/coast/",
+          "x": 34,
+          "y": 463,
+          "width": 32,
+          "height": 16,
+          "columns": 8,
+          "stepX": 66,
+          "names": [
+            "e-000",
+            "e-001",
+            "e-010",
+            "e-011",
+            "e-100",
+            "e-101",
+            "e-110",
+            "e-111"
+          ]
+        }
+      ]
+    },
+    "UNITS.GIF": {
+      "grids": [
+        {
+          "path": "units/",
+          "x": 1,
+          "y": 1,
+          "width": 64,
+          "height": 48,
+          "columns": 9,
+          "markers": {
+            "#0000ff": "shield"
+          },
+          "names": [
+            "settlers",
+            "engineers",
+            "warriors",
+            "phalanx",
+            "archers",
+            "legion",
+            "pikemen",
+            "musketeers",
+            "fanatics",
+            "partisans",
+            "alpine-troops",
+            "riflemen",
+            "marines",
+            "paratroopers",
+            "mech-inf",
+            "horsemen",
+            "chariot",
+            "elephant",
+            "crusaders",
+            "knights",
+            "dragoons",
+            "cavalry",
+            "armor",
+            "catapult",
+            "cannon",
+            "artillery",
+            "howitzer",
+            "fighter",
+            "bomber",
+            "helicopter",
+            "stlth-ftr",
+            "stlth-bmbr",
+            "trireme",
+            "caravel",
+            "galleon",
+            "frigate",
+            "ironclad",
+            "destroyer",
+            "cruiser",
+            "aegis-cruiser",
+            "battleship",
+            "submarine",
+            "carrier",
+            "transport",
+            "cruise-msl",
+            "nuclear-msl",
+            "diplomat",
+            "spy",
+            "caravan",
+            "freight",
+            "explorer",
+            "extra-land",
+            "extra-ship",
+            "extra-air",
+            "test-unit-1",
+            "test-unit-2",
+            "test-unit-3",
+            "test-unit-4",
+            "test-unit-5",
+            "test-unit-6",
+            "test-unit-7",
+            "test-unit-8"
+          ]
+        },
+        {
+          "path": "units/",
+          "x": 586,
+          "y": 1,
+          "width": 12,
+          "height": 20,
+          "columns": 2,
+          "stepX": 13,
+          "names": [
+            "shield",
+            "shield-back"
+          ]
+        }
+      ]
+    },
+    "CITIES.GIF": {
+      "grids": [
+        {
+          "path": "city/",
+          "x": 1,
+          "y": 39,
+          "width": 64,
+          "height": 48,
+          "columns": 4,
+          "markers": {
+            "#0000ff": "flag",
+            "#ff9b00": "size"
+          },
+          "names": [
+            "stone-bronze/0",
+            "stone-bronze/1",
+            "stone-bronze/2",
+            "stone-bronze/3",
+            "ancient-classical/0",
+            "ancient-classical/1",
+            "ancient-classical/2",
+            "ancient-classical/3",
+            "far-east/0",
+            "far-east/1",
+            "far-east/2",
+            "far-east/3",
+            "medieval/0",
+            "medieval/1",
+            "medieval/2",
+            "medieval/3",
+            "early-industrial/0",
+            "early-industrial/1",
+            "early-industrial/2",
+            "early-industrial/3",
+            "modern/0",
+            "modern/1",
+            "modern/2",
+            "modern/3"
+          ]
+        },
+        {
+          "path": "city/",
+          "x": 1,
+          "y": 347,
+          "width": 64,
+          "height": 48,
+          "columns": 4,
+          "markers": {
+            "#0000ff": "flag",
+            "#ff9b00": "size"
+          },
+          "names": [
+            "modern-alt/0",
+            "modern-alt/1",
+            "modern-alt/2",
+            "modern-alt/3"
+          ]
+        },
+        {
+          "path": "city/",
+          "x": 334,
+          "y": 39,
+          "width": 64,
+          "height": 48,
+          "columns": 4,
+          "markers": {
+            "#0000ff": "flag",
+            "#ff9b00": "size"
+          },
+          "names": [
+            "stone-bronze/walled-0",
+            "stone-bronze/walled-1",
+            "stone-bronze/walled-2",
+            "stone-bronze/walled-3",
+            "ancient-classical/walled-0",
+            "ancient-classical/walled-1",
+            "ancient-classical/walled-2",
+            "ancient-classical/walled-3",
+            "far-east/walled-0",
+            "far-east/walled-1",
+            "far-east/walled-2",
+            "far-east/walled-3",
+            "medieval/walled-0",
+            "medieval/walled-1",
+            "medieval/walled-2",
+            "medieval/walled-3",
+            "early-industrial/walled-0",
+            "early-industrial/walled-1",
+            "early-industrial/walled-2",
+            "early-industrial/walled-3",
+            "modern/walled-0",
+            "modern/walled-1",
+            "modern/walled-2",
+            "modern/walled-3"
+          ]
+        },
+        {
+          "path": "city/",
+          "x": 333,
+          "y": 347,
+          "width": 64,
+          "height": 48,
+          "columns": 4,
+          "markers": {
+            "#0000ff": "flag",
+            "#ff9b00": "size"
+          },
+          "names": [
+            "modern-alt/walled-0",
+            "modern-alt/walled-1",
+            "modern-alt/walled-2",
+            "modern-alt/walled-3"
+          ]
+        },
+        {
+          "path": "map/",
+          "x": 143,
+          "y": 423,
+          "width": 64,
+          "height": 48,
+          "columns": 4,
+          "names": [
+            "fortify",
+            "fortress",
+            "airbase",
+            "airbase-plane"
+          ]
+        }
+      ],
+      "flags": {
+        "x": 1,
+        "width": 14,
+        "height": 22,
+        "count": 9,
+        "rows": [
+          {
+            "name": "flag",
+            "y": 425
+          },
+          {
+            "name": "flag-2",
+            "y": 448
+          }
+        ]
+      }
+    }
+  }
+}

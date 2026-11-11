@@ -1,0 +1,43 @@
+{
+  "name": "@civ-clone/civ2-asset-extractor",
+  "version": "0.1.0",
+  "description": "Extracts the map graphics from a player's own copy of Civilization II, for civ-clone's renderer.",
+  "main": "index.js",
+  "bin": {
+    "civ2-asset-extractor": "cli.js"
+  },
+  "files": [
+    "*.js",
+    "*.d.ts",
+    "*.js.map",
+    "*.ts",
+    "lib/",
+    "extract-data.json"
+  ],
+  "repository": "git@github.com:civ-clone/civ2-asset-extractor.git",
+  "keywords": [
+    "typescript",
+    "civilization"
+  ],
+  "author": "dom111 <dom111@users.noreply.github.com>",
+  "license": "MIT",
+  "scripts": {
+    "build": "npm run ts:compile && npm run prettier:format",
+    "prettier:check": "prettier --config .prettierrc --check '**/*.ts'",
+    "prettier:format": "prettier --config .prettierrc '**/*.ts' --write",
+    "test": "ts-mocha ./tests/*.test.ts",
+    "test:coverage": "c8 ts-mocha ./tests/*.test.ts",
+    "ts:compile": "tsc --build tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/chai": "^4.0.0",
+    "@types/mocha": "^8.0.0",
+    "@types/node": "^18.0.0",
+    "c8": "^7.0.0",
+    "chai": "^4.0.0",
+    "mocha": "^10.0.0",
+    "prettier": "^2.0.0",
+    "ts-mocha": "^10.0.0",
+    "typescript": "^4.0.0"
+  }
+}
