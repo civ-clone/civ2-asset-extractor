@@ -239,10 +239,10 @@
           "height": 32,
           "columns": 8,
           "names": [
-            "river-mouth/0",
-            "river-mouth/1",
-            "river-mouth/2",
-            "river-mouth/3"
+            "river-mouth/ne",
+            "river-mouth/se",
+            "river-mouth/sw",
+            "river-mouth/nw"
           ],
           "clear": [
             "#00ffff"
