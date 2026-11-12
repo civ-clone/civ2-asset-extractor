@@ -22,6 +22,7 @@ This writes the sprites and a `metadata.json` holding each unit's shield anchor,
 - Coasts are drawn in quarter tiles: 32×16 diamonds at the top, right, bottom and left of the tile (`n`, `e`, `s`, `w`). Each quarter picks one of eight sprites by the three neighbours it touches, in clockwise order (for `n`: NW, N, NE), where `1` is land. `coast/n-011` is the top quarter with land to the N and NE.
 - Roads and railroads are one overlay per connected direction, plus `isolated`.
 - River mouths are drawn on the ocean tile next to a river, one per edge (`river-mouth/ne`, `se`, `sw`, `nw`). Each points at the land the river comes from.
+- Cities show the player's colour on a flag at their `flag` anchor. `city/flag` and `city/flag-2` are the first (red) flag from each of the sheet's two rows, light and dark. To colour one for a player, swap the red flag's two colours (`colours.flag[0]` or `colours['flag-2'][0]` in `metadata.json`) for that player's.
 - Units carry no player colour. The shield (`units/shield`, pure red) is recoloured with the player's colour and drawn at the unit's anchor.
 
 ## Not yet known
