@@ -43,7 +43,7 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    expect(sprites).to.have.length(287);
+    expect(sprites).to.have.length(289);
 
     const empty = sprites
       .filter(({ data }) => !data.some((value, i) => i % 4 === 3 && value > 0))
@@ -197,7 +197,7 @@ const source = process.env.CIV2_PATH;
 
   it('finds the flag and size anchors on every city', (): void => {
     sprites
-      .filter(({ name }) => name.startsWith('city/'))
+      .filter(({ name, width }) => name.startsWith('city/') && width === 64)
       .forEach(({ name, anchors }) => {
         expect(Object.keys(anchors ?? {}).sort(), name).to.deep.equal([
           'flag',
@@ -213,6 +213,30 @@ const source = process.env.CIV2_PATH;
     expect(
       new Set(colours.flag.map(({ primary }) => primary.join())).size
     ).to.equal(9);
+  });
+
+  it('cuts the red flags, drawn in the colours read for the first flag', (): void => {
+    const colours = results['CITIES.GIF']!.colours!;
+
+    (
+      [
+        ['city/flag', 'flag'],
+        ['city/flag-2', 'flag-2'],
+      ] as const
+    ).forEach(([name, row]) => {
+      const sprite = sprites.find((sprite) => sprite.name === name)!,
+        { primary, secondary } = colours[row]![0]!,
+        drawn = new Set<string>();
+
+      for (let i = 0; i < sprite.data.length; i += 4) {
+        if (sprite.data[i + 3]! > 0) {
+          drawn.add(Array.from(sprite.data.subarray(i, i + 3)).join());
+        }
+      }
+
+      expect(drawn, name).to.include(primary.join());
+      expect(drawn, name).to.include(secondary.join());
+    });
   });
 
   it('names the units from RULES.TXT', function (): void {

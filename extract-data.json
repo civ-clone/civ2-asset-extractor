@@ -545,6 +545,19 @@
             "airbase",
             "airbase-plane"
           ]
+        },
+        {
+          "path": "city/",
+          "x": 1,
+          "y": 425,
+          "width": 14,
+          "height": 22,
+          "columns": 1,
+          "stepY": 23,
+          "names": [
+            "flag",
+            "flag-2"
+          ]
         }
       ],
       "flags": {

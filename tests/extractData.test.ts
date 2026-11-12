@@ -45,7 +45,7 @@ describe('extract-data.json', (): void => {
       duplicates = names.filter((name, i) => names.indexOf(name) !== i);
 
     expect(duplicates).to.deep.equal([]);
-    expect(names).to.have.length(287);
+    expect(names).to.have.length(289);
   });
 
   it('marks the unit grid with the shield marker that `withUnitNames` looks for', (): void => {
