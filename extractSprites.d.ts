@@ -30,6 +30,7 @@ export type FlagDefinition = {
   }[];
 };
 export type FileDefinition = {
+  optional?: boolean;
   grids: GridDefinition[];
   flags?: FlagDefinition;
 };

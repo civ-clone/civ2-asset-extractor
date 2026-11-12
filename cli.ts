@@ -32,6 +32,7 @@ const extractData: ExtractData = JSON.parse(
     return file ? join(source, file) : null;
   },
   missing = Object.keys(extractData.files).filter((file) => !find(file)),
+  required = missing.filter((file) => !extractData.files[file].optional),
   rulesPath = find('RULES.TXT'),
   rules = rulesPath ? readFileSync(rulesPath, 'latin1') : '',
   metadata: {
@@ -39,16 +40,24 @@ const extractData: ExtractData = JSON.parse(
     colours: { [file: string]: unknown };
   } = { anchors: {}, colours: {} };
 
-if (missing.length > 0) {
-  console.error(`Missing from ${source}: ${missing.join(', ')}.`);
+if (required.length > 0) {
+  console.error(`Missing from ${source}: ${required.join(', ')}.`);
   process.exit(1);
 }
+
+missing
+  .filter((file) => !required.includes(file))
+  .forEach((file) => console.log(`No ${file}, so skipping its sprites.`));
 
 if (!rulesPath) {
   console.log('No RULES.TXT, so units keep their default names.');
 }
 
 Object.entries(extractData.files).forEach(([file, definition]) => {
+  if (missing.includes(file)) {
+    return;
+  }
+
   const { sprites, colours } = extractSprites(
     readFileSync(find(file)!),
     withUnitNames(definition, rules),

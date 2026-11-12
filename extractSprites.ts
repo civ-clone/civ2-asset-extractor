@@ -34,6 +34,9 @@ export type FlagDefinition = {
 };
 
 export type FileDefinition = {
+  // A sheet that only some sprites come from, such as `ICONS.GIF`. Without it
+  //  the rest are still extracted.
+  optional?: boolean;
   grids: GridDefinition[];
   flags?: FlagDefinition;
 };

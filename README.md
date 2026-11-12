@@ -1,8 +1,8 @@
 # civ2-asset-extractor
 
-Extracts the map graphics from a copy of Civilization II (tested with Multiplayer Gold Edition, patch 1.3) and writes them as `.png` files, named the Civ2 way. The art is copyrighted, so players supply their own files; nothing here contains any of it.
+Extracts the map graphics and resource icons from a copy of Civilization II (tested with Multiplayer Gold Edition, patch 1.3) and writes them as `.png` files, named the Civ2 way. The art is copyrighted, so players supply their own files; nothing here contains any of it.
 
-Needed files: `TERRAIN1.GIF`, `TERRAIN2.GIF`, `UNITS.GIF`, `CITIES.GIF`, plus `RULES.TXT` (optional) to name units.
+Needed files: `TERRAIN1.GIF`, `TERRAIN2.GIF`, `UNITS.GIF`, `CITIES.GIF`, plus `RULES.TXT` (optional) to name units and `ICONS.GIF` (optional) for the resource icons. Without `ICONS.GIF` the map sprites are still extracted.
 
 Run:
 
@@ -24,6 +24,7 @@ This writes the sprites and a `metadata.json` holding each unit's shield anchor,
 - River mouths are drawn on the ocean tile next to a river, one per edge (`river-mouth/ne`, `se`, `sw`, `nw`). Each points at the land the river comes from.
 - Cities show the player's colour on a flag at their `flag` anchor. `city/flag` and `city/flag-2` are the first (red) flag from each of the sheet's two rows, light and dark. To colour one for a player, swap the red flag's two colours (`colours.flag[0]` or `colours['flag-2'][0]` in `metadata.json`) for that player's.
 - Units carry no player colour. The shield (`units/shield`, pure red) is recoloured with the player's colour and drawn at the unit's anchor.
+- The resource icons come in two sizes: `icons/food`, `shield`, `trade`, `luxury`, `gold` and `science` are 14×14, and `icons/small/…` has the same six at 10×10. Unlike the other sheets, `ICONS.GIF` frames these cells in the first transparent colour rather than the border colour.
 
 ## Not yet known
 
