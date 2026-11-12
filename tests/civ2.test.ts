@@ -121,6 +121,67 @@ const source = process.env.CIV2_PATH;
     expect(misplaced).to.deep.equal([]);
   });
 
+  // Each mouth's land (its non-blue pixels) sits towards the edge it is named
+  // after, measured from the middle of the 64×32 diamond. One mouth's land is
+  // near the east corner, so check the naming as a whole: no other way of
+  // giving the four sprites the four edges fits the land better.
+  it('names each river mouth by the edge its land is on', (): void => {
+    const edges: { [edge: string]: [number, number] } = {
+        ne: [1, -1],
+        se: [1, 1],
+        sw: [-1, 1],
+        nw: [-1, -1],
+      },
+      names = Object.keys(edges),
+      centres = names.map((name) => {
+        const sprite = sprites.find(
+            (sprite) => sprite.name === `terrain/river-mouth/${name}`
+          )!,
+          land: [number, number][] = [];
+
+        for (let y = 0; y < sprite.height; y++) {
+          for (let x = 0; x < sprite.width; x++) {
+            const [r, g, b, a] = sprite.data.subarray(
+              (y * sprite.width + x) * 4
+            );
+
+            if (a! > 0 && !(b! > r! + 30 && b! > g!)) {
+              land.push([x - sprite.width / 2, y - sprite.height / 2]);
+            }
+          }
+        }
+
+        return [
+          land.reduce((sum, [x]) => sum + x, 0) / land.length,
+          land.reduce((sum, [, y]) => sum + y, 0) / land.length,
+        ];
+      }),
+      // How far a sprite's land lies along an edge's outward direction, which
+      // is (x/2, y) on the 2:1 diamond.
+      fit = (order: string[]) =>
+        order.reduce((total, edge, i) => {
+          const [signX, signY] = edges[edge]!,
+            [x, y] = centres[i]!;
+
+          return total + signX * x! + signY * y! * 2;
+        }, 0),
+      orders = (rest: string[]): string[][] =>
+        rest.length === 0
+          ? [[]]
+          : rest.flatMap((edge) =>
+              orders(rest.filter((other) => other !== edge)).map((order) => [
+                edge,
+                ...order,
+              ])
+            ),
+      best = Math.max(...orders(names).map(fit));
+
+    expect(fit(names)).to.equal(best);
+    orders(names)
+      .filter((order) => order.join() !== names.join())
+      .forEach((order) => expect(fit(order), order.join()).to.be.below(best));
+  });
+
   it('finds a shield anchor on every unit, inside the cell', (): void => {
     const units = sprites.filter(
       ({ name, width }) => name.startsWith('units/') && width === 64

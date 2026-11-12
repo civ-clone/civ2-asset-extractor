@@ -21,11 +21,11 @@ This writes the sprites and a `metadata.json` holding each unit's shield anchor,
 - Forest, hills, mountains and rivers have 16 sprites each, one per combination of matching neighbours. They're named by the neighbours that match (`river/ne-sw`, `hills/isolated`).
 - Coasts are drawn in quarter tiles: 32×16 diamonds at the top, right, bottom and left of the tile (`n`, `e`, `s`, `w`). Each quarter picks one of eight sprites by the three neighbours it touches, in clockwise order (for `n`: NW, N, NE), where `1` is land. `coast/n-011` is the top quarter with land to the N and NE.
 - Roads and railroads are one overlay per connected direction, plus `isolated`.
+- River mouths are drawn on the ocean tile next to a river, one per edge (`river-mouth/ne`, `se`, `sw`, `nw`). Each points at the land the river comes from.
 - Units carry no player colour. The shield (`units/shield`, pure red) is recoloured with the player's colour and drawn at the unit's anchor.
 
 ## Not yet known
 
-- Which way each river mouth (`river-mouth/0` to `3`) faces.
 - Whether classic Civ2 uses the same layout. Test of Time does not.
 
 ## Tests
