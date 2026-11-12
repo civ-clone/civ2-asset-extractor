@@ -14,12 +14,35 @@ const SHEET_WIDTH = 640,
   );
 
 describe('extract-data.json', (): void => {
-  it('describes the four map sheets', (): void => {
+  it('describes the four map sheets and the icons', (): void => {
     expect(Object.keys(extractData.files)).to.deep.equal([
       'TERRAIN1.GIF',
       'TERRAIN2.GIF',
       'UNITS.GIF',
       'CITIES.GIF',
+      'ICONS.GIF',
+    ]);
+  });
+
+  it('needs only the map sheets', (): void => {
+    expect(
+      Object.entries(extractData.files)
+        .filter(([, { optional }]) => optional)
+        .map(([file]) => file)
+    ).to.deep.equal(['ICONS.GIF']);
+  });
+
+  it('cuts each resource icon in both sizes', (): void => {
+    const icons = grids
+        .filter(({ file }) => file === 'ICONS.GIF')
+        .flatMap(({ path, names }) =>
+          names.flatMap((name) => (name === null ? [] : [path + name]))
+        ),
+      resources = ['food', 'shield', 'trade', 'luxury', 'gold', 'science'];
+
+    expect(icons).to.have.members([
+      ...resources.map((name) => `icons/${name}`),
+      ...resources.map((name) => `icons/small/${name}`),
     ]);
   });
 
@@ -45,7 +68,7 @@ describe('extract-data.json', (): void => {
       duplicates = names.filter((name, i) => names.indexOf(name) !== i);
 
     expect(duplicates).to.deep.equal([]);
-    expect(names).to.have.length(289);
+    expect(names).to.have.length(301);
   });
 
   it('marks the unit grid with the shield marker that `withUnitNames` looks for', (): void => {

@@ -43,7 +43,7 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    expect(sprites).to.have.length(289);
+    expect(sprites).to.have.length(301);
 
     const empty = sprites
       .filter(({ data }) => !data.some((value, i) => i % 4 === 3 && value > 0))
@@ -57,6 +57,9 @@ const source = process.env.CIV2_PATH;
   // all one opaque colour apart from any marker pixels. That is the sheet's
   // green border, or farmland's cyan outline. (A road from the cell before can
   // spill a pixel or two over the border.)
+  // `ICONS.GIF` frames its small icons in the first transparent colour instead,
+  //  on a background of the second, so there the frame must be all the first
+  //  transparent colour. A line through a cell would be mostly the second.
   it('lines every cell up inside its frame', (): void => {
     const misplaced: string[] = [];
 
@@ -91,6 +94,10 @@ const source = process.env.CIV2_PATH;
             const [colour, count] = [...counts.entries()].sort(
               ([, a], [, b]) => b - a
             )[0];
+
+            if (file === 'ICONS.GIF') {
+              return colour === transparent[0] && count === unmarked.length;
+            }
 
             return (
               !transparent.includes(colour) && count >= unmarked.length * 0.9
@@ -180,6 +187,39 @@ const source = process.env.CIV2_PATH;
     orders(names)
       .filter((order) => order.join() !== names.join())
       .forEach((order) => expect(fit(order), order.join()).to.be.below(best));
+  });
+
+  // Measured by each icon's average colour: the wheat, arrows, goblet and coin
+  //  are gold or orange, the shield and the flask's liquid are blue.
+  it('cuts the resource icons whose colours match their art', (): void => {
+    const lean = (name: string): 'warm' | 'blue' => {
+      const sprite = sprites.find((sprite) => sprite.name === name)!;
+      let red = 0,
+        blue = 0;
+
+      for (let i = 0; i < sprite.data.length; i += 4) {
+        if (sprite.data[i + 3]! > 0) {
+          red += sprite.data[i]!;
+          blue += sprite.data[i + 2]!;
+        }
+      }
+
+      return red > blue ? 'warm' : 'blue';
+    };
+
+    (
+      [
+        ['food', 'warm'],
+        ['shield', 'blue'],
+        ['trade', 'warm'],
+        ['luxury', 'warm'],
+        ['gold', 'warm'],
+        ['science', 'blue'],
+      ] as const
+    ).forEach(([name, expected]) => {
+      expect(lean(`icons/${name}`), name).to.equal(expected);
+      expect(lean(`icons/small/${name}`), `small ${name}`).to.equal(expected);
+    });
   });
 
   it('finds a shield anchor on every unit, inside the cell', (): void => {
