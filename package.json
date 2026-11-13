@@ -1,6 +1,6 @@
 {
   "name": "@civ-clone/civ2-asset-extractor",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Extracts the map graphics from a player's own copy of Civilization II, for civ-clone's renderer.",
   "main": "index.js",
   "bin": {
