@@ -90,7 +90,7 @@ export const withUnitNames = (
 export type AdvanceReference = string;
 
 // The text after a row's `;`, trimmed, or `null` when there is none.
-export type Comment = string | null;
+export type RowComment = string | null;
 
 // The game's integer parse (`text.cpp:1831`): `0x`, `0b` and `0d` prefixes for
 //  hexadecimal, binary and decimal, otherwise C's `atoi`, which reads an
@@ -144,7 +144,7 @@ export const parseBits = (token: string): number => {
 interface Row {
   line: string;
   fields: string[];
-  comment: Comment;
+  comment: RowComment;
 }
 
 // Splits a line into its comma-separated fields, each trimmed, and its comment.
@@ -264,7 +264,7 @@ export interface Cosmic {
   // The values as written. A missing line reads as 0.
   raw: CosmicRecord;
   // The values the game uses: each clamped to `cosmicLimits`, and an odd number
-  //  of food box rows rounded up to the next even one (`civ.cpp:906`).
+  //  of food box rows rounded up to the next even one (`civ.cpp:905`).
   effective: CosmicRecord;
 }
 
@@ -298,14 +298,14 @@ export interface AdvanceRecord {
   // Added to `aiValue` for a civilized leader, taken off for a militaristic one.
   civilizedModifier: number;
   prerequisites: [AdvanceReference, AdvanceReference];
-  // 0 to 3, ancient to modern.
+  // The era the advance belongs to, from 0 (the earliest) to 3.
   epoch: number;
-  // 0 to 4: military, economic, social, academic, applied.
+  // The kind of knowledge, 0 to 4 (OpenCiv2's `Advance.category`).
   category: number;
   // In the shipped file this is usually the advance's abbreviation, but the
   //  game doesn't read it (`civ.cpp:4945` uses a built-in list), so it can't be
   //  relied on.
-  comment: Comment;
+  comment: RowComment;
 }
 
 export const readCivilize = (rules: string): AdvanceRecord[] =>
@@ -319,6 +319,13 @@ export const readCivilize = (rules: string): AdvanceRecord[] =>
     comment: row.comment,
   }));
 
+/**
+ * Whether the game makes the advance available: its first prerequisite isn't
+ *  `no`. The game also re-points a prerequisite that names an unavailable
+ *  advance down that advance's first-prerequisite chain, for advances
+ *  (`civ.cpp:1040` to `:1050`) and improvements (`:1114` to `:1117`). This
+ *  doesn't; the records keep the prerequisites as written.
+ */
 export const isAdvanceAvailable = ({ prerequisites }: AdvanceRecord): boolean =>
   prerequisites[0] !== 'no';
 
@@ -348,7 +355,7 @@ export const readImprovements = (rules: string): ImprovementRecord[] =>
 export interface EndWonderRecord {
   // The advance after which the wonder stops working, or `nil`.
   expiresWith: AdvanceReference;
-  comment: Comment;
+  comment: RowComment;
 }
 
 export const readEndWonder = (rules: string): EndWonderRecord[] =>
@@ -437,6 +444,12 @@ export const readUnits = (rules: string): UnitRecord[] =>
     flags: parseBits(field(row, 13)),
   }));
 
+/**
+ * Whether the game makes the unit available: its prerequisite isn't `no`. A
+ *  unit's prerequisite that names an unavailable advance is left as written,
+ *  both here and by the game's unit loader; see `isAdvanceAvailable` for the
+ *  prerequisites the game does re-point.
+ */
 export const isUnitAvailable = ({ prerequisite }: UnitRecord): boolean =>
   prerequisite !== 'no';
 
@@ -450,13 +463,15 @@ export const terrainCount = 11;
 export interface TerrainChange {
   // `yes` (improves the square in place), `no` (can't be done), or the
   //  abbreviation of the terrain it changes the square to. `yes` and `no` match
-  //  case-insensitively (`civ.cpp:4977`).
+  //  case-insensitively (`civ.cpp:4977`), but this keeps the file's case, so
+  //  compare them ignoring case.
   result: string;
   // The extra food (irrigating) or shields (mining) it gives.
   bonus: number;
   // Turns for Settlers to do it.
   turns: number;
-  // The lowest government, 0 (never) to 6, under which the AI wants it done.
+  // The government index (1 to 6) from which an AI player will do this; 0
+  //  means an AI player never does.
   aiGovernment: number;
 }
 
@@ -477,7 +492,7 @@ export interface TerrainRecord {
   mining: TerrainChange | null;
   // The abbreviation of the terrain Engineers transform it to, or `no`.
   transform: string | null;
-  comment: Comment;
+  comment: RowComment;
 }
 
 export const readTerrain = (rules: string): TerrainRecord[] =>
@@ -509,7 +524,7 @@ export const readTerrain = (rules: string): TerrainRecord[] =>
     };
   });
 
-// @GOVERNMENTS (`civ.cpp:1446`): 7 rows, Anarchy (0) to Democracy (6).
+// @GOVERNMENTS (`civ.cpp:1446`): 7 rows, government indices 0 to 6.
 export interface GovernmentRecord {
   name: string;
   // The default titles of a male and a female leader.
@@ -524,7 +539,8 @@ export const readGovernments = (rules: string): GovernmentRecord[] =>
     femaleTitle: field(row, 2),
   }));
 
-// @LEADERS (`civ.cpp:1472`; `:1327` loads the same fields from the built-in rules): 21 rows, one per civilization.
+// @LEADERS (`civ.cpp:1472`): 21 rows, one per civilization. (`civ.cpp:1327`
+//  loads the same fields from the built-in rules.)
 export interface LeaderTitle {
   // The government (1 to 6) whose default titles these replace.
   government: number;
@@ -548,9 +564,9 @@ export interface LeaderRecord {
   attack: number;
   expand: number;
   civilize: number;
-  // The game reads a government and two titles at a time until the government
-  //  isn't above 0 (`civ.cpp:1555` to `:1568`), so Anarchy's titles can't be replaced and
-  //  a missing or trailing field ends the list.
+  // The game reads a government and two titles at a time until the
+  //  government isn't above 0 (`civ.cpp:1555` to `:1568`), so government 0's
+  //  titles can't be replaced, and a missing or trailing field ends the list.
   titles: LeaderTitle[];
 }
 

@@ -101,9 +101,9 @@ describe('readCosmic', (): void => {
 describe('readCivilize', (): void => {
   const rules = file(
     '@CIVILIZE',
-    'Stone Lore,      3, 1,  nil, nil, 0, 2    ; StL',
-    'Kite Making,     5,-2,  StL, nil, 1, 0    ; Kit',
-    'Cloud Reading,   2, 0,  Kit, StL, 3, 4',
+    'Stone Lore,      3, 1,  nil, nil, 0, 2    ; Sto',
+    'Kite Making,     5,-2,  Sto, nil, 1, 0    ; Kit',
+    'Cloud Reading,   2, 0,  Kit, Sto, 3, 4',
     'Spare Idea,      1, 0,  no,  no,  0, 0    ; S1',
     '; comment line: the game stops here',
     'Lost Idea,       1, 0,  nil, nil, 0, 0'
@@ -122,7 +122,7 @@ describe('readCivilize', (): void => {
       name: 'Kite Making',
       aiValue: 5,
       civilizedModifier: -2,
-      prerequisites: ['StL', 'nil'],
+      prerequisites: ['Sto', 'nil'],
       epoch: 1,
       category: 0,
       comment: 'Kit',
@@ -150,7 +150,7 @@ describe('readImprovements and readEndWonder', (): void => {
   const rules = file(
     '@IMPROVE',
     'Nothing Much,        1,  0,    nil,',
-    'Hut Circle,          6,  1,    StL,',
+    'Hut Circle,          6,  1,    Sto,',
     'Big Kite,            25, 0,    Kit,',
     '',
     '; the wonders expire',
@@ -163,7 +163,7 @@ describe('readImprovements and readEndWonder', (): void => {
   it('reads cost, upkeep and prerequisite, ignoring the trailing comma', (): void => {
     expect(readImprovements(rules)).to.deep.equal([
       { name: 'Nothing Much', cost: 1, upkeep: 0, prerequisite: 'nil' },
-      { name: 'Hut Circle', cost: 6, upkeep: 1, prerequisite: 'StL' },
+      { name: 'Hut Circle', cost: 6, upkeep: 1, prerequisite: 'Sto' },
       { name: 'Big Kite', cost: 25, upkeep: 0, prerequisite: 'Kit' },
     ]);
   });
@@ -189,7 +189,7 @@ describe('readImprovements and readEndWonder', (): void => {
 describe('readUnits', (): void => {
   const rules = file(
     '@UNITS',
-    'Pebble Thrower, Kit, 0,  1.,0,  2a,1d,  1h,1f,  3,0,  0, StL, 000000000000000',
+    'Pebble Thrower, Kit, 0,  1.,0,  2a,1d,  1h,1f,  3,0,  0, Sto, 000000000000000',
     'Sky Barge,      nil, 1, 10.,2,  4a,2d,  2h,2f, 12,3,  4, Cld, 000000010010001 ; a note',
     'Mud Wader,      nil, 2,  3.,0,  0a,1d,  1h,1f,  2,0,  1, no,  10',
     '; comment line: the game stops here',

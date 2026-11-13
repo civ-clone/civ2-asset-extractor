@@ -179,6 +179,13 @@ const readCivilize = (rules) => sectionRows(rules, '@CIVILIZE', 100).map((row) =
     comment: row.comment,
 }));
 exports.readCivilize = readCivilize;
+/**
+ * Whether the game makes the advance available: its first prerequisite isn't
+ *  `no`. The game also re-points a prerequisite that names an unavailable
+ *  advance down that advance's first-prerequisite chain, for advances
+ *  (`civ.cpp:1040` to `:1050`) and improvements (`:1114` to `:1117`). This
+ *  doesn't; the records keep the prerequisites as written.
+ */
 const isAdvanceAvailable = ({ prerequisites }) => prerequisites[0] !== 'no';
 exports.isAdvanceAvailable = isAdvanceAvailable;
 // @IMPROVE (`civ.cpp:1061`): 67 rows, city improvements in rows 0 to 38 and
@@ -246,6 +253,12 @@ const readUnits = (rules) => sectionRows(rules, '@UNITS', 62).map((row) => ({
     flags: (0, exports.parseBits)(field(row, 13)),
 }));
 exports.readUnits = readUnits;
+/**
+ * Whether the game makes the unit available: its prerequisite isn't `no`. A
+ *  unit's prerequisite that names an unavailable advance is left as written,
+ *  both here and by the game's unit loader; see `isAdvanceAvailable` for the
+ *  prerequisites the game does re-point.
+ */
 const isUnitAvailable = ({ prerequisite }) => prerequisite !== 'no';
 exports.isUnitAvailable = isUnitAvailable;
 // @TERRAIN (`civ.cpp:1251`): 33 rows. Rows 0 to 10 are the terrains; rows 11 to

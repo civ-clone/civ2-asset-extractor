@@ -6,7 +6,7 @@ export declare const withUnitNames: (
   rules: string
 ) => FileDefinition;
 export type AdvanceReference = string;
-export type Comment = string | null;
+export type RowComment = string | null;
 export declare const parseInteger: (token: string) => number;
 export declare const parseBits: (token: string) => number;
 export interface CosmicRecord {
@@ -48,9 +48,16 @@ export interface AdvanceRecord {
   prerequisites: [AdvanceReference, AdvanceReference];
   epoch: number;
   category: number;
-  comment: Comment;
+  comment: RowComment;
 }
 export declare const readCivilize: (rules: string) => AdvanceRecord[];
+/**
+ * Whether the game makes the advance available: its first prerequisite isn't
+ *  `no`. The game also re-points a prerequisite that names an unavailable
+ *  advance down that advance's first-prerequisite chain, for advances
+ *  (`civ.cpp:1040` to `:1050`) and improvements (`:1114` to `:1117`). This
+ *  doesn't; the records keep the prerequisites as written.
+ */
 export declare const isAdvanceAvailable: ({
   prerequisites,
 }: AdvanceRecord) => boolean;
@@ -65,7 +72,7 @@ export interface ImprovementRecord {
 export declare const readImprovements: (rules: string) => ImprovementRecord[];
 export interface EndWonderRecord {
   expiresWith: AdvanceReference;
-  comment: Comment;
+  comment: RowComment;
 }
 export declare const readEndWonder: (rules: string) => EndWonderRecord[];
 export interface UnitRecord {
@@ -112,6 +119,12 @@ export declare enum UnitFlag {
   DetectsSubmarines = 16384,
 }
 export declare const readUnits: (rules: string) => UnitRecord[];
+/**
+ * Whether the game makes the unit available: its prerequisite isn't `no`. A
+ *  unit's prerequisite that names an unavailable advance is left as written,
+ *  both here and by the game's unit loader; see `isAdvanceAvailable` for the
+ *  prerequisites the game does re-point.
+ */
 export declare const isUnitAvailable: ({ prerequisite }: UnitRecord) => boolean;
 export declare const terrainCount = 11;
 export interface TerrainChange {
@@ -132,7 +145,7 @@ export interface TerrainRecord {
   irrigation: TerrainChange | null;
   mining: TerrainChange | null;
   transform: string | null;
-  comment: Comment;
+  comment: RowComment;
 }
 export declare const readTerrain: (rules: string) => TerrainRecord[];
 export interface GovernmentRecord {
