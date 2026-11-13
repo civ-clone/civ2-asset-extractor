@@ -59,6 +59,10 @@ exports.withUnitNames = withUnitNames;
 //  hexadecimal, binary and decimal, otherwise C's `atoi`, which reads an
 //  optional sign and digits and ignores the rest (so `1.`, `2h` and `0a` are 1,
 //  2 and 0) and gives 0 for no digits.
+const atoi = (text) => {
+    const match = text.match(/^\s*[+-]?\d+/);
+    return match ? parseInt(match[0], 10) : 0;
+};
 const parseInteger = (token) => {
     var _a;
     const text = token.trimStart();
@@ -71,11 +75,10 @@ const parseInteger = (token) => {
             return parseInt(rest.match(/^[01]*/)[0] || '0', 2);
         }
         if (prefix === 'D') {
-            return (0, exports.parseInteger)(rest);
+            return atoi(rest);
         }
     }
-    const match = text.match(/^[+-]?\d+/);
-    return match ? parseInt(match[0], 10) : 0;
+    return atoi(text);
 };
 exports.parseInteger = parseInteger;
 // A bit string read most significant bit first, stopping at the first

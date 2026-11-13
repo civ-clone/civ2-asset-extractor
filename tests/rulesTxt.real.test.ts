@@ -18,7 +18,7 @@ import {
 } from '../rules';
 import { expect } from 'chai';
 import { join } from 'path';
-import { readFileSync } from 'fs';
+import { existsSync, readFileSync } from 'fs';
 
 // Parses the `RULES.TXT` of a real copy of Civilization II (Multiplayer Gold
 //  Edition 1.3) when `CIV2_PATH` points at its directory. Its contents are
@@ -29,8 +29,14 @@ const source = process.env.CIV2_PATH;
 (source ? describe : describe.skip)("a real copy's RULES.TXT", (): void => {
   let rules = '';
 
-  before((): void => {
-    rules = readFileSync(join(source!, 'RULES.TXT'), 'latin1');
+  before(function (): void {
+    const path = join(source!, 'RULES.TXT');
+
+    if (!existsSync(path)) {
+      this.skip();
+    }
+
+    rules = readFileSync(path, 'latin1');
   });
 
   it('reads all 22 @COSMIC values, within their limits once effective', (): void => {

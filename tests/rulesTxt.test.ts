@@ -37,6 +37,7 @@ describe('parseInteger', (): void => {
     expect(parseInteger('0b101')).to.equal(5);
     expect(parseInteger('0d12')).to.equal(12);
     expect(parseInteger('0d')).to.equal(0);
+    expect(parseInteger('0d0x10')).to.equal(0);
   });
 });
 

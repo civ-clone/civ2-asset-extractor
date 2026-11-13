@@ -96,6 +96,12 @@ export type Comment = string | null;
 //  hexadecimal, binary and decimal, otherwise C's `atoi`, which reads an
 //  optional sign and digits and ignores the rest (so `1.`, `2h` and `0a` are 1,
 //  2 and 0) and gives 0 for no digits.
+const atoi = (text: string): number => {
+  const match = text.match(/^\s*[+-]?\d+/);
+
+  return match ? parseInt(match[0], 10) : 0;
+};
+
 export const parseInteger = (token: string): number => {
   const text = token.trimStart();
 
@@ -112,13 +118,11 @@ export const parseInteger = (token: string): number => {
     }
 
     if (prefix === 'D') {
-      return parseInteger(rest);
+      return atoi(rest);
     }
   }
 
-  const match = text.match(/^[+-]?\d+/);
-
-  return match ? parseInt(match[0], 10) : 0;
+  return atoi(text);
 };
 
 // A bit string read most significant bit first, stopping at the first
@@ -463,7 +467,7 @@ export interface TerrainRecord {
   // 0 for the terrain itself, 1 or 2 for its special resources.
   special: 0 | 1 | 2;
   moveCost: number;
-  // In halves: 3 defends at 150%.
+  // In steps of 50% of normal defence.
   defence: number;
   food: number;
   shields: number;
