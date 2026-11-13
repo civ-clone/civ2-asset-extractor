@@ -12,6 +12,8 @@ This writes the sprites and a `metadata.json` holding each unit's shield anchor,
 
 `extractSprites` has no Node or `canvas` dependency: it returns RGBA data that a browser can put straight into `ImageData`. The package's `index` exports the library (`extractSprites`, `GifImage`, `withUnitNames`); `extract-data.json` describes where each sprite is on the sheets.
 
+`rules.ts` also reads `RULES.TXT`'s sections into typed records: `readCosmic`, `readCivilize`, `readImprovements`, `readEndWonder`, `readUnits`, `readTerrain`, `readGovernments`, `readLeaders` and `readDifficulty`. They follow the loaders in [OpenCiv2](https://github.com/richardpenman/civ2)'s `src/auto/civ.cpp`, and give the values as written; `readCosmic` also gives the clamped values the game uses. Pass them the file's text (it's Latin-1).
+
 ## How the sheets work
 
 - Every sheet is a grid with a 1px border. The last three palette entries are "transparent 1, border, transparent 2" (see `RULES.TXT`), so transparency is read by palette index, not by colour.
