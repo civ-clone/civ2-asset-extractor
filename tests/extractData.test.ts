@@ -14,13 +14,14 @@ const SHEET_WIDTH = 640,
   );
 
 describe('extract-data.json', (): void => {
-  it('describes the four map sheets and the icons', (): void => {
+  it('describes the four map sheets, the icons and the people', (): void => {
     expect(Object.keys(extractData.files)).to.deep.equal([
       'TERRAIN1.GIF',
       'TERRAIN2.GIF',
       'UNITS.GIF',
       'CITIES.GIF',
       'ICONS.GIF',
+      'PEOPLE.GIF',
     ]);
   });
 
@@ -29,7 +30,7 @@ describe('extract-data.json', (): void => {
       Object.entries(extractData.files)
         .filter(([, { optional }]) => optional)
         .map(([file]) => file)
-    ).to.deep.equal(['ICONS.GIF']);
+    ).to.deep.equal(['ICONS.GIF', 'PEOPLE.GIF']);
   });
 
   it('cuts each resource icon in both sizes', (): void => {
@@ -44,6 +45,55 @@ describe('extract-data.json', (): void => {
       ...resources.map((name) => `icons/${name}`),
       ...resources.map((name) => `icons/small/${name}`),
     ]);
+  });
+
+  it('cuts every citizen and specialist for each era, and the small ones', (): void => {
+    const people = grids
+        .filter(({ file }) => file === 'PEOPLE.GIF')
+        .flatMap(({ path, names }) =>
+          names.flatMap((name) => (name === null ? [] : [path + name]))
+        ),
+      citizens = [
+        ...['happy', 'content', 'unhappy', 'angry'].flatMap((mood) => [
+          `${mood}-male`,
+          `${mood}-female`,
+        ]),
+        'entertainer',
+        'tax-collector',
+        'scientist',
+      ];
+
+    expect(people).to.have.members([
+      ...['ancient', 'renaissance', 'industrial', 'modern'].flatMap((era) =>
+        citizens.map((citizen) => `people/${era}/${citizen}`)
+      ),
+      ...citizens.map((citizen) => `people/small/${citizen}`),
+    ]);
+  });
+
+  it('cuts each city style, walled and not, at every size', (): void => {
+    const cities = grids
+      .filter(({ file, path }) => file === 'CITIES.GIF' && path === 'city/')
+      .flatMap(({ names }) =>
+        names.filter((name) => name !== null && !name.startsWith('flag'))
+      );
+
+    expect(cities).to.have.members(
+      [
+        'stone-bronze',
+        'ancient-classical',
+        'far-east',
+        'medieval',
+        'early-industrial',
+        'modern',
+        'modern-alt',
+      ].flatMap((style) =>
+        [0, 1, 2, 3].flatMap((size) => [
+          `${style}/${size}`,
+          `${style}/walled-${size}`,
+        ])
+      )
+    );
   });
 
   it('keeps every cell, and its marker border, inside the sheet', (): void => {
@@ -68,7 +118,7 @@ describe('extract-data.json', (): void => {
       duplicates = names.filter((name, i) => names.indexOf(name) !== i);
 
     expect(duplicates).to.deep.equal([]);
-    expect(names).to.have.length(301);
+    expect(names).to.have.length(356);
   });
 
   it('marks the unit grid with the shield marker that `withUnitNames` looks for', (): void => {

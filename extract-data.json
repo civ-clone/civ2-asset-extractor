@@ -615,6 +615,86 @@
           ]
         }
       ]
+    },
+    "PEOPLE.GIF": {
+      "optional": true,
+      "grids": [
+        {
+          "path": "people/",
+          "x": 2,
+          "y": 6,
+          "width": 27,
+          "height": 30,
+          "columns": 11,
+          "names": [
+            "ancient/happy-male",
+            "ancient/happy-female",
+            "ancient/content-male",
+            "ancient/content-female",
+            "ancient/unhappy-male",
+            "ancient/unhappy-female",
+            "ancient/angry-male",
+            "ancient/angry-female",
+            "ancient/entertainer",
+            "ancient/tax-collector",
+            "ancient/scientist",
+            "renaissance/happy-male",
+            "renaissance/happy-female",
+            "renaissance/content-male",
+            "renaissance/content-female",
+            "renaissance/unhappy-male",
+            "renaissance/unhappy-female",
+            "renaissance/angry-male",
+            "renaissance/angry-female",
+            "renaissance/entertainer",
+            "renaissance/tax-collector",
+            "renaissance/scientist",
+            "industrial/happy-male",
+            "industrial/happy-female",
+            "industrial/content-male",
+            "industrial/content-female",
+            "industrial/unhappy-male",
+            "industrial/unhappy-female",
+            "industrial/angry-male",
+            "industrial/angry-female",
+            "industrial/entertainer",
+            "industrial/tax-collector",
+            "industrial/scientist",
+            "modern/happy-male",
+            "modern/happy-female",
+            "modern/content-male",
+            "modern/content-female",
+            "modern/unhappy-male",
+            "modern/unhappy-female",
+            "modern/angry-male",
+            "modern/angry-female",
+            "modern/entertainer",
+            "modern/tax-collector",
+            "modern/scientist"
+          ]
+        },
+        {
+          "path": "people/small/",
+          "x": 2,
+          "y": 137,
+          "width": 15,
+          "height": 26,
+          "columns": 11,
+          "names": [
+            "happy-male",
+            "happy-female",
+            "content-male",
+            "content-female",
+            "unhappy-male",
+            "unhappy-female",
+            "angry-male",
+            "angry-female",
+            "entertainer",
+            "tax-collector",
+            "scientist"
+          ]
+        }
+      ]
     }
   }
 }
