@@ -18,6 +18,7 @@ const source = process.env.CIV2_PATH;
 (source ? describe : describe.skip)('a real copy of Civ2', (): void => {
   let extractData: ExtractData,
     rules = '',
+    missing: string[] = [],
     results: { [file: string]: ExtractResult } = {},
     sprites: Sprite[] = [];
 
@@ -29,6 +30,18 @@ const source = process.env.CIV2_PATH;
     );
 
     rules = existsSync(rulesPath) ? readFileSync(rulesPath, 'latin1') : '';
+    // A copy without an optional sheet, such as `PEOPLE.GIF`, skips its
+    //  sprites, as the command does.
+    missing = Object.entries(extractData.files)
+      .filter(
+        ([file, { optional }]) => optional && !existsSync(join(source!, file))
+      )
+      .map(([file]) => file);
+    extractData.files = Object.fromEntries(
+      Object.entries(extractData.files).filter(
+        ([file]) => !missing.includes(file)
+      )
+    );
     results = Object.fromEntries(
       Object.entries(extractData.files).map(([file, definition]) => [
         file,
@@ -43,7 +56,19 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    expect(sprites).to.have.length(356);
+    // 356 from a complete copy, less the cells of any optional sheet it lacks.
+    const skipped = Object.entries(
+      (
+        JSON.parse(
+          readFileSync(join(__dirname, '..', 'extract-data.json')).toString()
+        ) as ExtractData
+      ).files
+    )
+      .filter(([file]) => missing.includes(file))
+      .flatMap(([, { grids }]) => grids.flatMap(({ names }) => names))
+      .filter((name) => name !== null).length;
+
+    expect(sprites).to.have.length(356 - skipped);
 
     const empty = sprites
       .filter(({ data }) => !data.some((value, i) => i % 4 === 3 && value > 0))
@@ -53,11 +78,13 @@ const source = process.env.CIV2_PATH;
   });
 
   // A grid that is a pixel out still extracts something, so check the layout
-  // itself: the line just left of and just above every cell is a frame, nearly
+  // itself: the lines just outside each side of every cell are a frame, nearly
   // all one opaque colour apart from any marker pixels. That is the sheet's
   // green border, `PEOPLE.GIF`'s black one, or farmland's cyan outline. (A road
-  // from the cell before can spill a pixel or two over the border, and the
-  // small angry man's hair covers three pixels of his.)
+  // from the cell before can spill a pixel or two over the border, and in
+  // `people/small/` the angry man's hair covers three pixels of his.) Checking
+  // the right and bottom lines too catches a cell whose top row is solid, such
+  // as the unit shield, shifted down a pixel.
   // `ICONS.GIF` frames its small icons in the first transparent colour instead,
   //  on a background of the second, so there the frame must be all the first
   //  transparent colour. A line through a cell would be mostly the second.
@@ -70,7 +97,8 @@ const source = process.env.CIV2_PATH;
         transparent = [size - 3, size - 1];
 
       grids.forEach((grid) => {
-        const stepX = grid.stepX ?? grid.width + 1,
+        const share = grid.path === 'people/small/' ? 0.85 : 0.9,
+          stepX = grid.stepX ?? grid.width + 1,
           stepY = grid.stepY ?? grid.height + 1,
           markers = Object.keys(grid.markers ?? {}).map((hex) =>
             hex.toLowerCase()
@@ -101,7 +129,7 @@ const source = process.env.CIV2_PATH;
             }
 
             return (
-              !transparent.includes(colour) && count >= unmarked.length * 0.85
+              !transparent.includes(colour) && count >= unmarked.length * share
             );
           };
 
@@ -117,9 +145,15 @@ const source = process.env.CIV2_PATH;
             ),
             top = Array.from({ length: grid.width }, (_, dx) =>
               image.index(x + dx, y - 1)
+            ),
+            right = Array.from({ length: grid.height }, (_, dy) =>
+              image.index(x + grid.width, y + dy)
+            ),
+            bottom = Array.from({ length: grid.width }, (_, dx) =>
+              image.index(x + dx, y + grid.height)
             );
 
-          if (!isFrame(left) || !isFrame(top)) {
+          if (![left, top, right, bottom].every(isFrame)) {
             misplaced.push(`${file} ${grid.path}${name}`);
           }
         });
@@ -192,7 +226,11 @@ const source = process.env.CIV2_PATH;
 
   // Measured by each icon's average colour: the wheat, arrows, goblet and coin
   //  are gold or orange, the shield and the flask's liquid are blue.
-  it('cuts the resource icons whose colours match their art', (): void => {
+  it('cuts the resource icons whose colours match their art', function (): void {
+    if (missing.includes('ICONS.GIF')) {
+      this.skip();
+    }
+
     const lean = (name: string): 'warm' | 'blue' => {
       const sprite = sprites.find((sprite) => sprite.name === name)!;
       let red = 0,
@@ -225,7 +263,11 @@ const source = process.env.CIV2_PATH;
 
   // The frame test checks each cell is lined up; this checks no two cells are
   //  the same one, so a grid can't be cut a whole cell out.
-  it('cuts eleven different faces for each era', (): void => {
+  it('cuts eleven different faces for each era', function (): void {
+    if (missing.includes('PEOPLE.GIF')) {
+      this.skip();
+    }
+
     const faces = sprites
         .filter(
           ({ name }) =>
