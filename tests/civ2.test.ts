@@ -43,7 +43,7 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    expect(sprites).to.have.length(301);
+    expect(sprites).to.have.length(356);
 
     const empty = sprites
       .filter(({ data }) => !data.some((value, i) => i % 4 === 3 && value > 0))
@@ -55,8 +55,9 @@ const source = process.env.CIV2_PATH;
   // A grid that is a pixel out still extracts something, so check the layout
   // itself: the line just left of and just above every cell is a frame, nearly
   // all one opaque colour apart from any marker pixels. That is the sheet's
-  // green border, or farmland's cyan outline. (A road from the cell before can
-  // spill a pixel or two over the border.)
+  // green border, `PEOPLE.GIF`'s black one, or farmland's cyan outline. (A road
+  // from the cell before can spill a pixel or two over the border, and the
+  // small angry man's hair covers three pixels of his.)
   // `ICONS.GIF` frames its small icons in the first transparent colour instead,
   //  on a background of the second, so there the frame must be all the first
   //  transparent colour. A line through a cell would be mostly the second.
@@ -100,7 +101,7 @@ const source = process.env.CIV2_PATH;
             }
 
             return (
-              !transparent.includes(colour) && count >= unmarked.length * 0.9
+              !transparent.includes(colour) && count >= unmarked.length * 0.85
             );
           };
 
@@ -220,6 +221,25 @@ const source = process.env.CIV2_PATH;
       expect(lean(`icons/${name}`), name).to.equal(expected);
       expect(lean(`icons/small/${name}`), `small ${name}`).to.equal(expected);
     });
+  });
+
+  // The frame test checks each cell is lined up; this checks no two cells are
+  //  the same one, so a grid can't be cut a whole cell out.
+  it('cuts eleven different faces for each era', (): void => {
+    const faces = sprites
+        .filter(
+          ({ name }) =>
+            name.startsWith('people/') && !name.startsWith('people/small/')
+        )
+        .map(({ data }) => Array.from(data).join()),
+      small = sprites
+        .filter(({ name }) => name.startsWith('people/small/'))
+        .map(({ data }) => Array.from(data).join());
+
+    expect(faces).to.have.length(44);
+    expect(new Set(faces).size).to.equal(44);
+    expect(small).to.have.length(11);
+    expect(new Set(small).size).to.equal(11);
   });
 
   it('finds a shield anchor on every unit, inside the cell', (): void => {
