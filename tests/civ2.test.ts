@@ -56,7 +56,7 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    // 356 from a complete copy, less the cells of any optional sheet it lacks.
+    // 430 from a complete copy, less the cells of any optional sheet it lacks.
     const skipped = Object.entries(
       (
         JSON.parse(
