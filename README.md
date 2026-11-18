@@ -1,8 +1,8 @@
 # civ2-asset-extractor
 
-Extracts the map graphics, resource icons and citizens from a copy of Civilization II (tested with Multiplayer Gold Edition, patch 1.3) and writes them as `.png` files, named the Civ2 way. The art is copyrighted, so players supply their own files; nothing here contains any of it.
+Extracts the map graphics, resource icons, improvement and Wonder pictures and citizens from a copy of Civilization II (tested with Multiplayer Gold Edition, patch 1.3) and writes them as `.png` files, named the Civ2 way. The art is copyrighted, so players supply their own files; nothing here contains any of it.
 
-Needed files: `TERRAIN1.GIF`, `TERRAIN2.GIF`, `UNITS.GIF`, `CITIES.GIF`, plus `RULES.TXT` (optional) to name units, `ICONS.GIF` (optional) for the resource icons and `PEOPLE.GIF` (optional) for the citizens. Without the optional sheets the map sprites are still extracted.
+Needed files: `TERRAIN1.GIF`, `TERRAIN2.GIF`, `UNITS.GIF`, `CITIES.GIF`, plus `RULES.TXT` (optional) to name units, `ICONS.GIF` (optional) for the resource icons, the research and global warming meters and the improvement and Wonder pictures, and `PEOPLE.GIF` (optional) for the citizens. Without the optional sheets the map sprites are still extracted.
 
 Run:
 
@@ -29,6 +29,8 @@ This writes the sprites and a `metadata.json` holding each unit's shield anchor,
 - Cities have seven rows of styles: `stone-bronze`, `ancient-classical`, `far-east` and `medieval`, which a civilization starts in, then `early-industrial` and `modern`, which every civilization moves on to as it learns the advances. The game itself only reads the first six; `modern-alt` is on the sheet but unused. Each has four sizes, `0` to `3`, plain and `walled-0` to `walled-3`.
 - The citizens come in four eras, `people/ancient`, `renaissance`, `industrial` and `modern`, each a 27×30 face: `happy`, `content`, `unhappy` and `angry`, each as `-male` and `-female` (`angry-female`), then the specialists `entertainer`, `tax-collector` and `scientist`. The game alternates men and women along the row of citizens. `people/small/` has the same eleven at 15×26, with no era. `PEOPLE.GIF` frames its cells in black, not the border colour.
 - The resource icons come in two sizes: `icons/food`, `shield`, `trade`, `luxury`, `gold` and `science` are 14×14, and `icons/small/…` has the same six at 10×10. Unlike the other sheets, `ICONS.GIF` frames these cells in the first transparent colour rather than the border colour.
+- `icons/research/0` to `3` and `icons/warming/0` to `3` are the research and global warming meters, 14×14, in the order the sheet has them.
+- The improvements' and Wonders' pictures are 36×20: `buildings/…` in `@IMPROVE` order after "Nothing" (`buildings/palace` to `buildings/capitalization`), then `wonders/…` (`wonders/pyramids` to `wonders/cure-for-cancer`), each named as `toSlug` names its row in the original `RULES.TXT`. A scenario's renamed improvements keep these names.
 
 ## Not yet known
 

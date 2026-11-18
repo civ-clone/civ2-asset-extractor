@@ -35,7 +35,10 @@ describe('extract-data.json', (): void => {
 
   it('cuts each resource icon in both sizes', (): void => {
     const icons = grids
-        .filter(({ file }) => file === 'ICONS.GIF')
+        .filter(
+          ({ file, path }) =>
+            file === 'ICONS.GIF' && ['icons/', 'icons/small/'].includes(path)
+        )
         .flatMap(({ path, names }) =>
           names.flatMap((name) => (name === null ? [] : [path + name]))
         ),
@@ -44,6 +47,62 @@ describe('extract-data.json', (): void => {
     expect(icons).to.have.members([
       ...resources.map((name) => `icons/${name}`),
       ...resources.map((name) => `icons/small/${name}`),
+    ]);
+  });
+
+  it('cuts the research and global warming meters, four stages each', (): void => {
+    expect(
+      grids
+        .filter(({ path }) =>
+          ['icons/research/', 'icons/warming/'].includes(path)
+        )
+        .map(({ file, path, width, height, names }) => [
+          file,
+          path,
+          width,
+          height,
+          names,
+        ])
+    ).to.deep.equal([
+      ['ICONS.GIF', 'icons/research/', 14, 14, ['0', '1', '2', '3']],
+      ['ICONS.GIF', 'icons/warming/', 14, 14, ['0', '1', '2', '3']],
+    ]);
+  });
+
+  // In RULES.TXT's order, as `toSlug` names them: the improvements after
+  //  "Nothing", then the Wonders.
+  it('cuts every improvement and Wonder picture from ICONS.GIF', (): void => {
+    const pictures = (path: string) =>
+      grids
+        .filter((grid) => grid.path === path)
+        .map(({ file, width, height, names }) => ({
+          file,
+          width,
+          height,
+          names: names.length,
+          first: names[0],
+          last: names[names.length - 1],
+        }));
+
+    expect(pictures('buildings/')).to.deep.equal([
+      {
+        file: 'ICONS.GIF',
+        width: 36,
+        height: 20,
+        names: 38,
+        first: 'palace',
+        last: 'capitalization',
+      },
+    ]);
+    expect(pictures('wonders/')).to.deep.equal([
+      {
+        file: 'ICONS.GIF',
+        width: 36,
+        height: 20,
+        names: 28,
+        first: 'pyramids',
+        last: 'cure-for-cancer',
+      },
     ]);
   });
 
@@ -118,7 +177,7 @@ describe('extract-data.json', (): void => {
       duplicates = names.filter((name, i) => names.indexOf(name) !== i);
 
     expect(duplicates).to.deep.equal([]);
-    expect(names).to.have.length(356);
+    expect(names).to.have.length(430);
   });
 
   it('marks the unit grid with the shield marker that `withUnitNames` looks for', (): void => {
