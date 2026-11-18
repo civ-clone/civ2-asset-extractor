@@ -8,7 +8,7 @@ import { existsSync, readFileSync } from 'fs';
 import { expect } from 'chai';
 import { join } from 'path';
 import { GifImage } from '../GifImage';
-import { withUnitNames } from '../rules';
+import { readImprovements, toSlug, withUnitNames } from '../rules';
 
 // Runs against a real copy of Civilization II (Multiplayer Gold Edition 1.3)
 // when `CIV2_PATH` points at its directory. Civ2's files are copyrighted, so
@@ -56,7 +56,7 @@ const source = process.env.CIV2_PATH;
   });
 
   it('extracts every sprite, each with something drawn in it', (): void => {
-    // 356 from a complete copy, less the cells of any optional sheet it lacks.
+    // 430 from a complete copy, less the cells of any optional sheet it lacks.
     const skipped = Object.entries(
       (
         JSON.parse(
@@ -68,7 +68,7 @@ const source = process.env.CIV2_PATH;
       .flatMap(([, { grids }]) => grids.flatMap(({ names }) => names))
       .filter((name) => name !== null).length;
 
-    expect(sprites).to.have.length(356 - skipped);
+    expect(sprites).to.have.length(430 - skipped);
 
     const empty = sprites
       .filter(({ data }) => !data.some((value, i) => i % 4 === 3 && value > 0))
@@ -347,5 +347,22 @@ const source = process.env.CIV2_PATH;
     }
 
     expect(sprites.map(({ name }) => name)).to.include('units/settlers');
+  });
+
+  // The pictures are in the order RULES.TXT lists the improvements and Wonders,
+  //  "Nothing" aside, so each is named as `toSlug` names its row.
+  it('names the improvement and Wonder pictures as RULES.TXT does', function (): void {
+    if (rules === '' || missing.includes('ICONS.GIF')) {
+      this.skip();
+    }
+
+    const slugs = readImprovements(rules).map(({ name }) => toSlug(name)),
+      names = (path: string) =>
+        extractData.files['ICONS.GIF']!.grids.find(
+          (grid) => grid.path === path
+        )!.names;
+
+    expect(names('buildings/')).to.deep.equal(slugs.slice(1, 39));
+    expect(names('wonders/')).to.deep.equal(slugs.slice(39));
   });
 });
